@@ -1,20 +1,42 @@
 package pmt.servermon_android;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.ParseException;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
+	private String mToken;
+	
+	private void checkAuth(){
+		SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+		if (sharedpreferences.getString("token", null) == null){
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+		}else{
+			mToken = sharedpreferences.getString("token", null);
+			//populate listview etc.
+		}
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		checkAuth();
+		ApiHelper.getUserServers(mToken);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Intent intent = new Intent(this, LoginActivity.class);
-		startActivity(intent);
+
 	}
 
 	@Override

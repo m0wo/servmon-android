@@ -1,23 +1,12 @@
 package pmt.servermon_android;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +28,10 @@ public class LoginActivity extends Activity {
 			Editor editor = sharedpreferences.edit();
 			editor.putString("token", token);
 			editor.commit();
+			
+			Log.d("key stored:", sharedpreferences.getString("token", null));
+			Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
 			
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block

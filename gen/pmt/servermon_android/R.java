@@ -25,10 +25,11 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080005;
+        public static final int action_settings=0x7f080006;
         public static final int btnLogin=0x7f080004;
         public static final int etEmail=0x7f080001;
         public static final int etPassword=0x7f080003;
+        public static final int lvServers=0x7f080005;
         public static final int tvEmail=0x7f080000;
         public static final int tvPassword=0x7f080002;
     }
