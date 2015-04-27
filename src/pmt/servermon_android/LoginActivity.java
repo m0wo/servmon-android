@@ -29,6 +29,8 @@ public class LoginActivity extends Activity {
 		login(email, password);
 	}
 	
+	
+	
 	public void login(String email, String password){
 		final class AuthTask extends AsyncTask<String, Integer, HttpResponse>{
 			HttpClient httpClient = new DefaultHttpClient();
@@ -56,12 +58,23 @@ public class LoginActivity extends Activity {
 	    			HttpResponse response = httpClient.execute(post);	
 	    			String responseBody = EntityUtils.toString(response.getEntity());
 	    			
+	    			JSONObject token = new JSONObject(responseBody);
+	    			
+	    			HttpPost userServers = new HttpPost("http://student20265.201415.uk/pmt/api/user/server/");
+	    			userServers.setEntity(new StringEntity(token.toString()));
+	    			response = httpClient.execute(userServers);
+	    			responseBody = EntityUtils.toString(response.getEntity());
+	    			
 	    			Log.d("Response Test", responseBody);
+	    			
 	    			
 	    		} catch (IOException e) {
 	    			// TODO Auto-generated catch block
 	    			e.printStackTrace();
-	    		}
+	    		} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    		return null;
 	    	}
 			
