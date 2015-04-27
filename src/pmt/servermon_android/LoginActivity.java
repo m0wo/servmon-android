@@ -10,9 +10,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -36,20 +39,24 @@ public class LoginActivity extends Activity {
 		final class AuthTask extends AsyncTask<String, Integer, HttpResponse>{
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://student20265.201415.uk/pmt/api/auth/user");
-
+			
+			JSONObject userJson = new JSONObject();
 	    	@Override
 	    	protected HttpResponse doInBackground(String... params) {
 	    		
-	            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-	    		
 	    		try {
-	                nameValuePairs.add(new BasicNameValuePair("email", params[0]));
-	                nameValuePairs.add(new BasicNameValuePair("password", params[1]));
-	                post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+	    			userJson.put("email", params[0]);
+	    			userJson.put("password", params[1]);
+	    			
+	                post.setEntity(new StringEntity(userJson.toString()));
 	    		} catch (UnsupportedEncodingException e1) {
 	    			// TODO Auto-generated catch block
 	    			e1.printStackTrace();
-	    		}
+	    		} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    		
 	    		try {
 	    			HttpResponse response = httpClient.execute(post);	
