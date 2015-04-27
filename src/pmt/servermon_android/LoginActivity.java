@@ -2,6 +2,8 @@ package pmt.servermon_android;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -12,6 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +31,21 @@ public class LoginActivity extends Activity {
 	public void loginButton(View v){
 		String email = ((EditText) findViewById(R.id.etEmail)).getEditableText().toString();
 		String password = ((EditText) findViewById(R.id.etPassword)).getEditableText().toString();
-		ApiHelper.login(email, password);
+		
+		try {
+			String token = ApiHelper.login(email, password);
+			
+			SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);	
+			Editor editor = sharedpreferences.edit();
+			editor.putString("token", token);
+			editor.commit();
+			
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Log.d("Response Test", ApiHelper.mToken);
+
 	}
 	
 

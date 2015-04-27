@@ -2,8 +2,10 @@ package pmt.servermon_android;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -12,16 +14,22 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class ApiHelper {
 	
-	public static void login(String email, String password){
+	public static String mToken = null;
+	
+	public static String login(String email, String password) throws InterruptedException, ExecutionException{
 		final class AuthTask extends AsyncTask<String, Integer, HttpResponse>{
+			
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://student20265.201415.uk/pmt/api/auth/user");
-			
+			HttpResponse response;
 			JSONObject userJson = new JSONObject();
 	    	@Override
 	    	protected HttpResponse doInBackground(String... params) {
@@ -41,32 +49,54 @@ public class ApiHelper {
 				}
 	    		
 	    		try {
-	    			HttpResponse response = httpClient.execute(post);	
-	    			String responseBody = EntityUtils.toString(response.getEntity());
+	    			response = httpClient.execute(post);	
 	    			
-	    			JSONObject token = new JSONObject(responseBody);
+
 	    			
-	    			HttpPost userServers = new HttpPost("http://student20265.201415.uk/pmt/api/user/server/");
+	    			
+	    			//all for getting server stuff
+	    			
+	    			/*HttpPost userServers = new HttpPost("http://student20265.201415.uk/pmt/api/user/server/");
 	    			userServers.setEntity(new StringEntity(token.toString()));
 	    			response = httpClient.execute(userServers);
-	    			responseBody = EntityUtils.toString(response.getEntity());
+	    			responseBody = EntityUtils.toString(response.getEntity());*/
 	    			
-	    			Log.d("Response Test", responseBody);
+	    			
 	    			
 	    			
 	    		} catch (IOException e) {
 	    			// TODO Auto-generated catch block
 	    			e.printStackTrace();
-	    		} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	    		return null;
-	    	}
+	    		}
+	    		return response;
+	    	}    	
+	    	
 			
 		}
 		
 		AuthTask auth = new AuthTask();
-		auth.execute(email, password);
+		HttpResponse response = auth.execute(email, password).get();
+		
+		
+		String responseBody = null;
+		String tokenString = null;
+		
+		try {
+			responseBody = EntityUtils.toString(response.getEntity());
+		} catch (ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			JSONObject token = new JSONObject(responseBody);
+			tokenString = token.get("token").toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return tokenString;
+		
 	}
 }
