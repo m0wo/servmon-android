@@ -2,6 +2,7 @@ package pmt.servermon_android;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -110,10 +111,21 @@ public class ApiHelper {
 	
 	public static Server jsonToServer(JSONObject json){
 		Log.d("Server", json.toString());
-		return null;
+		Server server = null;
+		try {
+			server = new Server(json.getString("server_id"), json.getString("server_name"), json.getString("operating_system"), json.getString("uptime"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.d("Server object", server.toString());
+		
+		return server;
 	}
 	
-	public static List<Server> getUserServers(String token){
+	public static ArrayList<Server> getUserServers(String token){
+		
+		ArrayList<Server> serverList = new ArrayList<Server>();
 		
 		ApiHelper api = new ApiHelper();
 		
@@ -138,7 +150,7 @@ public class ApiHelper {
 			
 			for (int i = 0; i < servers.length(); i++) {
 			    JSONObject server = servers.getJSONObject(i);
-			    jsonToServer(server);
+			    serverList.add(jsonToServer(server));
 			}
 			
 		} catch (JSONException e) {
@@ -148,7 +160,7 @@ public class ApiHelper {
 		
 		Log.d("Servers:", responseBody);
 		
-		return null;
+		return serverList;
 		
 	}
 	
