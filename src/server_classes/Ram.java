@@ -12,6 +12,16 @@ public class Ram {
 		this.usedRam = usedRam;
 		this.timeStamp = timeStamp;
 	}
+	
+	public Ram(String totalRam, String usedRam) {
+		super();
+		this.totalRam = totalRam;
+		this.usedRam = usedRam;
+	}
+	
+	public Ram(){
+		super();
+	}
 
 	public String getTotalRam() {
 		return totalRam;
@@ -35,5 +45,11 @@ public class Ram {
 
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	@Override
+	public String toString() {
+		return "Ram [totalRam=" + totalRam + ", usedRam=" + usedRam
+				+ ", timeStamp=" + timeStamp + "]";
 	}
 }

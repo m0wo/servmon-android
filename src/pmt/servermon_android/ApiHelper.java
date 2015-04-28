@@ -3,8 +3,6 @@ package pmt.servermon_android;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
@@ -18,13 +16,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import server_classes.Cpu;
+import server_classes.Ram;
 import server_classes.Server;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class ApiHelper {
+	
+	public static JSONObject mToken;
 	
 	final class AuthTask extends AsyncTask<String, Integer, HttpResponse>{
 		
@@ -61,6 +61,8 @@ public class ApiHelper {
     	
 		
 	}
+	
+
 	
 	final class HttpGet extends AsyncTask<String, Integer, HttpResponse>{
 		
@@ -132,6 +134,91 @@ public class ApiHelper {
     		return response;
     	}    	
     	
+		
+	}
+	
+	final class GetRam extends AsyncTask<String, Integer, HttpResponse>{
+
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = null;
+		HttpResponse response = null;
+		JSONObject tokenJson = new JSONObject();
+		
+		@Override
+		protected HttpResponse doInBackground(String... params) {
+			String url = "http://student20265.201415.uk/pmt/api/user/server/" + params[1] + "/ram/";
+			try {
+				tokenJson.put("token", params[0]);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			post = new HttpPost(url);
+			try {
+				post.setEntity(new StringEntity(tokenJson.toString()));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				response = httpClient.execute(post);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return response;
+		}
+		
+	}
+	
+	final class GenericCall extends AsyncTask<String, Integer, HttpResponse>{
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = null;
+		HttpResponse response;
+		
+		
+    	@Override
+    	protected HttpResponse doInBackground(String... params) {
+    		post = new HttpPost(params[0]);
+    		try {
+    			
+                post.setEntity(new StringEntity(mToken.toString()));
+    		} catch (UnsupportedEncodingException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}
+    		
+    		try {
+    			response = httpClient.execute(post);	
+    			
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		return response;
+    	}
+		
+	}
+	
+	public static Cpu getCpu(String id){
+
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/cpu/";
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		
+		HttpResponse response;
+		try {
+			response = get.execute(url).get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 		
 	}
 	
@@ -212,6 +299,34 @@ public class ApiHelper {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static Ram getRam(String token, String id){
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GetRam ramGet = api.new GetRam();
+		HttpResponse response = null;
+		Ram ram = new Ram();
+		
+		try {
+			response = ramGet.execute(token, id).get();
+			String responseBody = EntityUtils.toString(response.getEntity());
+			
+			Log.d("Ram Response", responseBody);
+			
+			
+			
+
+			JSONObject ramObj = new JSONObject(responseBody);
+			ram.setTotalRam(ramObj.getString("total_ram"));
+			ram.setUsedRam(ramObj.getString("used_ram_mb"));			
+			
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ram;
 	}
 	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{

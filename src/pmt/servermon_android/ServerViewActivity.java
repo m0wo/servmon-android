@@ -1,6 +1,6 @@
 package pmt.servermon_android;
 
-import pmt.servermon_android.ApiHelper.GetServer;
+import server_classes.Ram;
 import server_classes.Server;
 import android.app.Activity;
 import android.content.Context;
@@ -10,17 +10,35 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class ServerViewActivity extends Activity {
 
 	private Server mServer;
+	private Ram mRam;
 	private String mToken;
+	
+	private TextView ramTv;
+	private TextView cpuTv;
+	private TextView diskTv;
+	private TextView netTv;
 	
 	public String getToken(){
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
 				Context.MODE_PRIVATE);
 		
 		return sharedpreferences.getString("token", null);
+	}
+	
+	private void initView(){
+		ramTv = (TextView) findViewById(R.id.tvRamInfo);
+		cpuTv = (TextView) findViewById(R.id.tvCpuInfo);
+		diskTv = (TextView) findViewById(R.id.tvDiskInfo);
+		netTv = (TextView) findViewById(R.id.tvNetworkInfo);
+	}
+	
+	private void updateView(){
+		ramTv.setText(mRam.toString());
 	}
 	
 	@Override
@@ -31,14 +49,17 @@ public class ServerViewActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_server_view);
+		initView();
 		
 		Log.d("Server", mServer.toString());
 		Log.d("Server ID", mServer.getServerId());
 		
-		String token = getToken();
-		String id = mServer.getServerId();
+		setmToken(getToken());
 		
-		Server s = ApiHelper.getServer(token, id);
+		//Server s = ApiHelper.getServer(mToken, mServer.getServerId());
+		
+		mRam = ApiHelper.getRam(mToken, mServer.getServerId());
+		updateView();
 	}
 
 	@Override
@@ -59,4 +80,21 @@ public class ServerViewActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	public Ram getmRam() {
+		return mRam;
+	}
+
+	public void setmRam(Ram mRam) {
+		this.mRam = mRam;
+	}
+
+	public String getmToken() {
+		return mToken;
+	}
+
+	public void setmToken(String mToken) {
+		this.mToken = mToken;
+	}
+	
 }

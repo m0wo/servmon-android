@@ -2,6 +2,9 @@ package pmt.servermon_android;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import server_classes.Server;
 import android.app.Activity;
 import android.content.Context;
@@ -32,6 +35,14 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		} else {
 			mToken = sharedpreferences.getString("token", null);
+			try {
+				JSONObject objToken = new JSONObject();
+				objToken.put("token", mToken);
+				ApiHelper.mToken = objToken;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// populate listview etc.
 		}
 	}
