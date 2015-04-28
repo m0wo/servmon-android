@@ -1,7 +1,9 @@
 package pmt.servermon_android;
 
+import server_classes.Disk;
 import server_classes.Ram;
 import server_classes.Server;
+import server_classes.Cpu;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,9 @@ public class ServerViewActivity extends Activity {
 
 	private Server mServer;
 	private Ram mRam;
+	private Cpu mCpu;
+	private Disk mDisk;
+	
 	private String mToken;
 	
 	private TextView ramTv;
@@ -39,6 +44,14 @@ public class ServerViewActivity extends Activity {
 	
 	private void updateView(){
 		ramTv.setText(mRam.toString());
+		cpuTv.setText(mCpu.toString());
+		diskTv.setText(mDisk.toString());
+	}
+	
+	private void updateStats(){
+		mRam = ApiHelper.getRam(mServer.getServerId());
+		mCpu = ApiHelper.getCpu(mServer.getServerId());
+		mDisk = ApiHelper.getDisk(mServer.getServerId());
 	}
 	
 	@Override
@@ -58,7 +71,8 @@ public class ServerViewActivity extends Activity {
 		
 		//Server s = ApiHelper.getServer(mToken, mServer.getServerId());
 		
-		mRam = ApiHelper.getRam(mServer.getServerId());
+
+		updateStats();
 		updateView();
 	}
 
