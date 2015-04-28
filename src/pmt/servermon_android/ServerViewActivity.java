@@ -58,7 +58,7 @@ public class ServerViewActivity extends Activity {
 		
 		//Server s = ApiHelper.getServer(mToken, mServer.getServerId());
 		
-		mRam = ApiHelper.getRam(mToken, mServer.getServerId());
+		mRam = ApiHelper.getRam(mServer.getServerId());
 		updateView();
 	}
 

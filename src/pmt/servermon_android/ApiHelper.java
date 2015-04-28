@@ -329,6 +329,30 @@ public class ApiHelper {
 		return ram;
 	}
 	
+	public static Ram getRam(String id){
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		HttpResponse response = null;
+		Ram ram = new Ram();
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/ram/";
+		
+		try {
+			response = get.execute(url).get();
+			
+			String responseBody = EntityUtils.toString(response.getEntity());
+			JSONObject ramObj = new JSONObject(responseBody);
+			ram.setTotalRam(ramObj.getString("total_ram"));
+			ram.setUsedRam(ramObj.getString("used_ram_mb"));
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		return ram;
+	}
+	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{
 		
 		ApiHelper api = new ApiHelper();
