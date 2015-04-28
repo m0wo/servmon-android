@@ -29,11 +29,16 @@ public class ServerViewActivity extends Activity {
 		Intent i = getIntent();
 		mServer = i.getParcelableExtra("server");
 		
-		Log.d("Server", mServer.toString());
-		Server s = ApiHelper.getServer(getToken(), mServer.getServerId());
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_server_view);
+		
+		Log.d("Server", mServer.toString());
+		Log.d("Server ID", mServer.getServerId());
+		
+		String token = getToken();
+		String id = mServer.getServerId();
+		
+		Server s = ApiHelper.getServer(token, id);
 	}
 
 	@Override

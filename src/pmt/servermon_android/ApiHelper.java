@@ -197,8 +197,15 @@ public class ApiHelper {
 		
 		ApiHelper.GetServer get = api.new GetServer();	//what the fuck
 		try {
-			Log.d("Server result",EntityUtils.toString(get.execute(token, id).get().getEntity()));
-			return jsonToServer(new JSONObject(EntityUtils.toString(get.execute(token, id).get().getEntity())));
+			
+			HttpResponse response = get.execute(token,id).get();
+			String responseBody = EntityUtils.toString(response.getEntity());
+			
+			Log.d("Servers!", responseBody);
+			Server s =  jsonToServer(new JSONObject(responseBody));
+			Log.d("Server Object!", s.toString());
+			//Log.d("Server result",EntityUtils.toString(get.execute(token, id).get().getEntity()));
+			return s;
 		} catch (ParseException | JSONException | IOException
 				| InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
