@@ -1,6 +1,9 @@
 package server_classes;
 
-public class Server {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Server implements Parcelable {
 	
 	private String serverId;
 	private String serverName;
@@ -55,4 +58,37 @@ public class Server {
 				+ "]";
 	}
 	
+
+    protected Server(Parcel in) {
+        serverId = in.readString();
+        serverName = in.readString();
+        operatingSystem = in.readString();
+        uptime = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(serverId);
+        dest.writeString(serverName);
+        dest.writeString(operatingSystem);
+        dest.writeString(uptime);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
+        @Override
+        public Server createFromParcel(Parcel in) {
+            return new Server(in);
+        }
+
+        @Override
+        public Server[] newArray(int size) {
+            return new Server[size];
+        }
+    };
 }

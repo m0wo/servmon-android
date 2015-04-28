@@ -35,6 +35,12 @@ public class MainActivity extends Activity {
 			// populate listview etc.
 		}
 	}
+	
+	private void openServerPage(Server s){
+		Intent intent = new Intent(this, ServerViewActivity.class);
+		intent.putExtra("server", s);
+		startActivity(intent);
+	}
 
 	private void setOnClick() {
 
@@ -45,11 +51,13 @@ public class MainActivity extends Activity {
 					long arg3) {
 				final AdapterView<ServerAdapter> v = (AdapterView<ServerAdapter>) arg0;
 				View view = v.getChildAt(arg2);
-
+				
+				Server s = v.getAdapter().getItem(arg2);
+				
 				TextView txt1 = (TextView) view.findViewById(R.id.tvServername);
-
+				Log.d("serverObject", s.getServerName());
 				Log.d("listView", txt1.getText().toString());
-
+				openServerPage(s);
 			}
 
 		});

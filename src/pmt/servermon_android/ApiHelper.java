@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import server_classes.Server;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -50,19 +52,6 @@ public class ApiHelper {
     		try {
     			response = httpClient.execute(post);	
     			
-
-    			
-    			
-    			//all for getting server stuff
-    			
-    			/*HttpPost userServers = new HttpPost("http://student20265.201415.uk/pmt/api/user/server/");
-    			userServers.setEntity(new StringEntity(token.toString()));
-    			response = httpClient.execute(userServers);
-    			responseBody = EntityUtils.toString(response.getEntity());*/
-    			
-    			
-    			
-    			
     		} catch (IOException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -86,6 +75,43 @@ public class ApiHelper {
     		try {
 
     			tokenJson.put("token", params[0]);
+    			
+                post.setEntity(new StringEntity(tokenJson.toString()));
+    		} catch (UnsupportedEncodingException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    		try {
+    			response = httpClient.execute(post);	
+    			
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		return response;
+    	}    	
+    	
+		
+	}
+	
+	final class GetServer extends AsyncTask<String, Integer, HttpResponse>{
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = null;
+		HttpResponse response;
+		JSONObject tokenJson = new JSONObject();
+		
+    	@Override
+    	protected HttpResponse doInBackground(String... params) {
+    		
+    		try {
+    			Log.d("url", "http://student20265.201415.uk/pmt/api/user/server/" + params[1]);
+    			tokenJson.put("token", params[0]);
+    			post = new HttpPost("http://student20265.201415.uk/pmt/api/user/server/" + params[1]);
     			
                 post.setEntity(new StringEntity(tokenJson.toString()));
     		} catch (UnsupportedEncodingException e1) {
@@ -162,6 +188,23 @@ public class ApiHelper {
 		
 		return serverList;
 		
+	}
+	
+	public static Server getServer(String token, String id){
+		//Server server = null;
+		
+		ApiHelper api = new ApiHelper();
+		
+		ApiHelper.GetServer get = api.new GetServer();	//what the fuck
+		try {
+			Log.d("Server result",EntityUtils.toString(get.execute(token, id).get().getEntity()));
+			return jsonToServer(new JSONObject(EntityUtils.toString(get.execute(token, id).get().getEntity())));
+		} catch (ParseException | JSONException | IOException
+				| InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{

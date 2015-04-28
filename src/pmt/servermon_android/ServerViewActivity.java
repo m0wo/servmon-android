@@ -1,14 +1,37 @@
 package pmt.servermon_android;
 
+import pmt.servermon_android.ApiHelper.GetServer;
+import server_classes.Server;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class ServerViewActivity extends Activity {
 
+	private Server mServer;
+	private String mToken;
+	
+	public String getToken(){
+		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
+				Context.MODE_PRIVATE);
+		
+		return sharedpreferences.getString("token", null);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		Intent i = getIntent();
+		mServer = i.getParcelableExtra("server");
+		
+		Log.d("Server", mServer.toString());
+		Server s = ApiHelper.getServer(getToken(), mServer.getServerId());
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_server_view);
 	}
