@@ -8,43 +8,66 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
 	private String mToken;
 	private ListView lvServers;
-	
-	private void checkAuth(){
-		SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-		if (sharedpreferences.getString("token", null) == null){
+	private ServerAdapter mAdapter;
+
+	private void checkAuth() {
+		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
+				Context.MODE_PRIVATE);
+		if (sharedpreferences.getString("token", null) == null) {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
-		}else{
+		} else {
 			mToken = sharedpreferences.getString("token", null);
-			//populate listview etc.
+			// populate listview etc.
 		}
 	}
-	
+
+	private void setOnClick() {
+
+		lvServers.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				final AdapterView<ServerAdapter> v = (AdapterView<ServerAdapter>) arg0;
+				View view = v.getChildAt(arg2);
+
+				TextView txt1 = (TextView) view.findViewById(R.id.tvServername);
+
+				Log.d("listView", txt1.getText().toString());
+
+			}
+
+		});
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		checkAuth();
 		ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		lvServers = (ListView) findViewById(R.id.lvServers);
-		
-        ArrayAdapter<Server> arrayAdapter = new ArrayAdapter<Server>(
-                this, 
-                android.R.layout.simple_list_item_1,
-                servers );
-        
-        lvServers.setAdapter(arrayAdapter);
-		
+
+		mAdapter = new ServerAdapter(this, servers);
+
+		lvServers.setAdapter(mAdapter);
+		setOnClick();
 	}
 
 	@Override
