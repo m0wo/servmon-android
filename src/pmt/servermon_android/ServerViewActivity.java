@@ -95,7 +95,10 @@ public class ServerViewActivity extends Activity {
 	}
 	
 	private void initUpdateService(){
-		startService(new Intent(this, UpdateService.class));
+		Intent i = new Intent(this, UpdateService.class);
+		i.putExtra("id", mServer.getServerId());
+		
+		startService(i);
 	}
 	
 	public void update(){
