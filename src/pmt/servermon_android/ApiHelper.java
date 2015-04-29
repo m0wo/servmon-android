@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import server_classes.Cpu;
 import server_classes.Disk;
+import server_classes.Network;
 import server_classes.Ram;
 import server_classes.Server;
 import android.os.AsyncTask;
@@ -401,6 +402,37 @@ public class ApiHelper {
 		}
 		
 		return disks;
+	}
+	
+	public static Network getNetwork(String id){
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		HttpResponse response = null;
+		
+		Network network = new Network();
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/network/";
+		
+		try {
+			response = get.execute(url).get();
+			
+			String responseBody = EntityUtils.toString(response.getEntity());
+			JSONObject netObj = new JSONObject(responseBody);
+			
+			network.setHostname(netObj.getString("hostname"));
+			network.setIpAddress(netObj.getString("ip_address"));
+			network.setGateway(netObj.getString("gateway"));
+			network.setPublicIp(netObj.getString("public_ip"));
+			network.setUploadTotal(netObj.getString("upload_total"));
+			network.setDownloadTotal(netObj.getString("download_total"));
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return network;
+		
 	}
 	
 	public static Cpu getCpu(String id){

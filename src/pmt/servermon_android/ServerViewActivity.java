@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import server_classes.Cpu;
 import server_classes.Disk;
+import server_classes.Network;
 import server_classes.Ram;
 import server_classes.Server;
 import android.app.Activity;
@@ -22,6 +23,7 @@ public class ServerViewActivity extends Activity {
 	private Ram mRam;
 	private Cpu mCpu;
 	private Disk mDisk;
+	private Network mNet;
 	
 	private ArrayList<Disk> mDisks;
 	private ArrayList<Cpu> mCpus;
@@ -67,6 +69,7 @@ public class ServerViewActivity extends Activity {
 	private void updateView(){
 		ramTv.setText(mRam.toString());
 		cpuTv.setText(mCpu.toString());
+		netTv.setText(mNet.toString());
 		updateDiskView();
 	}
 	
@@ -76,7 +79,7 @@ public class ServerViewActivity extends Activity {
 		mCpus = ApiHelper.getCpus(mServer.getServerId());
 		//mDisk = ApiHelper.getDisk(mServer.getServerId());
 		mDisks = ApiHelper.getDisks(mServer.getServerId());
-		
+		mNet = ApiHelper.getNetwork(mServer.getServerId());
 	}
 	
 	@Override
