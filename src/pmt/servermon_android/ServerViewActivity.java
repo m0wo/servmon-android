@@ -1,9 +1,11 @@
 package pmt.servermon_android;
 
+import java.util.ArrayList;
+
+import server_classes.Cpu;
 import server_classes.Disk;
 import server_classes.Ram;
 import server_classes.Server;
-import server_classes.Cpu;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +23,17 @@ public class ServerViewActivity extends Activity {
 	private Cpu mCpu;
 	private Disk mDisk;
 	
+	private ArrayList<Disk> mDisks;
+	private ArrayList<Cpu> mCpus;
+	
+	
 	private String mToken;
 	
 	private TextView ramTv;
 	private TextView cpuTv;
 	private TextView diskTv;
 	private TextView netTv;
+	private TextView tvServerName;
 	
 	public String getToken(){
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
@@ -40,18 +47,36 @@ public class ServerViewActivity extends Activity {
 		cpuTv = (TextView) findViewById(R.id.tvCpuInfo);
 		diskTv = (TextView) findViewById(R.id.tvDiskInfo);
 		netTv = (TextView) findViewById(R.id.tvNetworkInfo);
+		
+		tvServerName = (TextView) findViewById(R.id.tvServerTitle);
+		
+		tvServerName.setText(mServer.getServerName());
+	}
+	
+	private void updateDiskView(){
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(Disk d : mDisks){
+			sb.append(d.toString());
+			sb.append("\n");
+		}
+		diskTv.setText(sb.toString());
 	}
 	
 	private void updateView(){
 		ramTv.setText(mRam.toString());
 		cpuTv.setText(mCpu.toString());
-		diskTv.setText(mDisk.toString());
+		updateDiskView();
 	}
 	
 	private void updateStats(){
 		mRam = ApiHelper.getRam(mServer.getServerId());
 		mCpu = ApiHelper.getCpu(mServer.getServerId());
-		mDisk = ApiHelper.getDisk(mServer.getServerId());
+		mCpus = ApiHelper.getCpus(mServer.getServerId());
+		//mDisk = ApiHelper.getDisk(mServer.getServerId());
+		mDisks = ApiHelper.getDisks(mServer.getServerId());
+		
 	}
 	
 	@Override
@@ -66,7 +91,6 @@ public class ServerViewActivity extends Activity {
 		
 		Log.d("Server", mServer.toString());
 		Log.d("Server ID", mServer.getServerId());
-		
 		setmToken(getToken());
 		
 		//Server s = ApiHelper.getServer(mToken, mServer.getServerId());

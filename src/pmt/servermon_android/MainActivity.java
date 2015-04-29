@@ -27,9 +27,11 @@ public class MainActivity extends Activity {
 	private ListView lvServers;
 	private ServerAdapter mAdapter;
 
-	private void checkAuth() {
+	private boolean checkAuth() {
+		boolean result = false;
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
 				Context.MODE_PRIVATE);
+
 		if (sharedpreferences.getString("token", null) == null) {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
@@ -39,15 +41,18 @@ public class MainActivity extends Activity {
 				JSONObject objToken = new JSONObject();
 				objToken.put("token", mToken);
 				ApiHelper.mToken = objToken;
+				result = true;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// populate listview etc.
 		}
+
+		return result;
 	}
-	
-	private void openServerPage(Server s){
+
+	private void openServerPage(Server s) {
 		Intent intent = new Intent(this, ServerViewActivity.class);
 		intent.putExtra("server", s);
 		startActivity(intent);
@@ -62,9 +67,9 @@ public class MainActivity extends Activity {
 					long arg3) {
 				final AdapterView<ServerAdapter> v = (AdapterView<ServerAdapter>) arg0;
 				View view = v.getChildAt(arg2);
-				
+
 				Server s = v.getAdapter().getItem(arg2);
-				
+
 				TextView txt1 = (TextView) view.findViewById(R.id.tvServername);
 				Log.d("serverObject", s.getServerName());
 				Log.d("listView", txt1.getText().toString());
@@ -76,17 +81,21 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		checkAuth();
-		ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		lvServers = (ListView) findViewById(R.id.lvServers);
 
-		mAdapter = new ServerAdapter(this, servers);
+		if (checkAuth()) {
+			ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
+			lvServers = (ListView) findViewById(R.id.lvServers);
 
-		lvServers.setAdapter(mAdapter);
-		setOnClick();
+			mAdapter = new ServerAdapter(this, servers);
+
+			lvServers.setAdapter(mAdapter);
+			setOnClick();
+
+		}
+
 	}
 
 	@Override

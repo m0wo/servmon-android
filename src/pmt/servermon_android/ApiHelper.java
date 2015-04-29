@@ -40,7 +40,7 @@ public class ApiHelper {
 
     			userJson.put("email", params[0]);
     			userJson.put("password", params[1]);
-    			
+				userJson.put("is_mobile", true);
                 post.setEntity(new StringEntity(userJson.toString()));
     		} catch (UnsupportedEncodingException e1) {
     			// TODO Auto-generated catch block
@@ -150,6 +150,7 @@ public class ApiHelper {
 			String url = "http://student20265.201415.uk/pmt/api/user/server/" + params[1] + "/ram/";
 			try {
 				tokenJson.put("token", params[0]);
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -364,6 +365,44 @@ public class ApiHelper {
 		return disk;
 	}
 	
+	
+	public static ArrayList<Disk> getDisks(String id){
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		HttpResponse response = null;
+		
+		ArrayList<Disk> disks = new ArrayList<Disk>();
+		
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/disk/";
+		
+		try {
+			response = get.execute(url).get();
+			
+			String responseBody = EntityUtils.toString(response.getEntity());
+			JSONArray diskArr = new JSONArray(responseBody);
+			
+			for(int i = 0; i < diskArr.length(); i++){
+				
+				Disk disk = new Disk();
+				
+				JSONObject diskObj = diskArr.getJSONObject(i);
+				disk.setId(diskObj.getString("id"));
+				disk.setTotalSpace(diskObj.getString("total_space"));
+				disk.setRemainingSpace(diskObj.getString("remaining_space"));
+				disk.setReadSpeed(diskObj.getString("read_speed"));
+				disk.setWriteSpeed(diskObj.getString("write_speed"));
+				
+				disks.add(disk);
+			}
+			
+		} catch (InterruptedException | ExecutionException | JSONException | ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return disks;
+	}
+	
 	public static Cpu getCpu(String id){
 
 		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/cpu/";
@@ -376,7 +415,12 @@ public class ApiHelper {
 			response = get.execute(url).get();
 			
 			String responseBody = EntityUtils.toString(response.getEntity());
-			JSONObject cpuObj = new JSONObject(responseBody);
+			JSONObject cpuObj;
+			
+			JSONArray cpuArray = new JSONArray(responseBody);
+			
+			cpuObj = cpuArray.getJSONObject(0);
+			
 			
 			cpu.setId(cpuObj.getString("id"));
 			cpu.setVendor(cpuObj.getString("vendor"));
@@ -393,6 +437,46 @@ public class ApiHelper {
 		
 	}
 	
+	public static ArrayList<Cpu> getCpus(String id){
+		
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/cpu/";
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		
+		ArrayList<Cpu> cpus = new ArrayList<Cpu>();
+		
+		
+		Cpu cpu = new Cpu();
+		
+		HttpResponse response;
+		try {
+			response = get.execute(url).get();
+			
+			String responseBody = EntityUtils.toString(response.getEntity());
+			JSONObject cpuObj;
+			
+			JSONArray cpuArray = new JSONArray(responseBody);
+			
+			for(int i = 0; i < cpuArray.length(); i++){
+				
+				cpuObj = cpuArray.getJSONObject(i);
+				cpu.setId(cpuObj.getString("id"));
+				cpu.setVendor(cpuObj.getString("vendor"));
+				cpu.setModel(cpuObj.getString("model"));
+				cpu.setClock_speed(cpuObj.getString("clock_speed"));
+				cpu.setCpu_usage_percentage(cpuObj.getString("cpu_usage_percentage"));
+				
+				
+			}
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cpus;
+	}
+	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{
 		
 		ApiHelper api = new ApiHelper();
@@ -405,6 +489,7 @@ public class ApiHelper {
 		
 		try {
 			responseBody = EntityUtils.toString(response.getEntity());
+			Log.d("what the fuck", responseBody);
 		} catch (ParseException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
