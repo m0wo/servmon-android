@@ -1,9 +1,6 @@
 package server_classes;
 
 public class Network {
-<<<<<<< HEAD
-	
-=======
 
 	private String id;
 	private String hostname;
@@ -92,5 +89,5 @@ public class Network {
 				+ ", uploadTotal=" + uploadTotal + ", downloadTotal="
 				+ downloadTotal + "]";
 	}
->>>>>>> 9f8727f9af987b6bbe80d0cd75f685f4fd52d976
+	
 }
