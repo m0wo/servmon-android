@@ -44,7 +44,7 @@ public class ServerViewActivity extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d("Received!", "The Broadcast!");
-			
+			updateView(intent.getStringExtra("ram"), intent.getStringExtra("cpu"), intent.getStringExtra("disk"), intent.getStringExtra("network"));
 		}
 		
 	};
@@ -85,6 +85,13 @@ public class ServerViewActivity extends Activity {
 		updateDiskView();
 	}
 	
+	private void updateView(String ram, String cpu, String disks, String net){
+		ramTv.setText(ram);
+		cpuTv.setText(cpu);
+		netTv.setText(net);
+		diskTv.setText(disks);
+	}
+	
 	private void updateStats(){
 		mRam = ApiHelper.getRam(mServer.getServerId());
 		mCpu = ApiHelper.getCpu(mServer.getServerId());
@@ -93,6 +100,8 @@ public class ServerViewActivity extends Activity {
 		mDisks = ApiHelper.getDisks(mServer.getServerId());
 		mNet = ApiHelper.getNetwork(mServer.getServerId());
 	}
+	
+
 	
 	private void initUpdateService(){
 		Intent i = new Intent(this, UpdateService.class);
@@ -127,10 +136,11 @@ public class ServerViewActivity extends Activity {
 		
 		
 		initUpdateService();
-		updateStats();
-		updateView();
+		//updateStats();
+		//updateView();
 		
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

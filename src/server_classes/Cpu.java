@@ -1,7 +1,6 @@
 package server_classes;
 
 public class Cpu {
-	//[{"id":1,"vendor":"Intel","model":"i5","clock_speed":2000,"cpu_usage_percentage":62},{"id":2,"vendor":"Intel","model":"i5","clock_speed":2000,"cpu_usage_percentage":54}]
 	
 	private String id;
 	private String vendor;

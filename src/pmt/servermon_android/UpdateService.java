@@ -28,6 +28,11 @@ public class UpdateService extends Service {
                 Log.d("Disk", ApiHelper.getDisks(mServerId).toString());
                 Log.d("Network", ApiHelper.getNetwork(mServerId).toString());
                 
+                intent.putExtra("ram", ApiHelper.getRam(mServerId).toString());
+                intent.putExtra("cpu", ApiHelper.getCpu(mServerId).toString());
+                intent.putExtra("disk", ApiHelper.getDisks(mServerId).toString());
+                intent.putExtra("network", ApiHelper.getNetwork(mServerId).toString());
+                
                 sendBroadcast(intent);
                 
             }
@@ -36,7 +41,7 @@ public class UpdateService extends Service {
     };
     
     private void queueRunnable() {
-        mHandler.postDelayed(updateRunnable, 5000);
+        mHandler.postDelayed(updateRunnable, 1000);
     }
     
 	@Override
