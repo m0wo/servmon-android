@@ -8,8 +8,10 @@ import server_classes.Network;
 import server_classes.Ram;
 import server_classes.Server;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +38,16 @@ public class ServerViewActivity extends Activity {
 	private TextView diskTv;
 	private TextView netTv;
 	private TextView tvServerName;
+	
+	private BroadcastReceiver receiver = new BroadcastReceiver(){
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d("Received!", "The Broadcast!");
+			
+		}
+		
+	};
 	
 	public String getToken(){
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
@@ -82,6 +94,15 @@ public class ServerViewActivity extends Activity {
 		mNet = ApiHelper.getNetwork(mServer.getServerId());
 	}
 	
+	private void initUpdateService(){
+		startService(new Intent(this, UpdateService.class));
+	}
+	
+	public void update(){
+		updateStats();
+		updateView();
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -99,8 +120,13 @@ public class ServerViewActivity extends Activity {
 		//Server s = ApiHelper.getServer(mToken, mServer.getServerId());
 		
 
+		registerReceiver(receiver, new IntentFilter("pmt.servermon_android"));
+		
+		
+		initUpdateService();
 		updateStats();
 		updateView();
+		
 	}
 
 	@Override

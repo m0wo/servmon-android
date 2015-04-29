@@ -93,7 +93,6 @@ public class MainActivity extends Activity {
 
 			lvServers.setAdapter(mAdapter);
 			setOnClick();
-
 		}
 
 	}

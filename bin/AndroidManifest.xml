@@ -34,9 +34,8 @@
         </activity>
         
         <service	
-            android:name="UpdateSerivce"
-        	android:icon="@drawable/ic_launcher"
-        	android:label="@string/app_name"
+            android:name=".UpdateService"
+            android:enabled="true"
         	/>
         
     </application>
