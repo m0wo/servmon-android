@@ -34,6 +34,9 @@ public class ApiHelper {
 		HttpPost post = new HttpPost("http://student20265.201415.uk/pmt/api/auth/user");
 		HttpResponse response;
 		JSONObject userJson = new JSONObject();
+		
+		
+		
     	@Override
     	protected HttpResponse doInBackground(String... params) {
     		
@@ -563,6 +566,74 @@ public class ApiHelper {
 		};
 		new Thread(run).start();
 	}
+	
+	public static JSONArray getRamHistory(final String id){
+		
+
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/ram/list/";
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		
+		
+		HttpResponse response;
+		String responseBody = null;
+		
+		try {
+			response = get.execute(url).get();
+
+			responseBody = EntityUtils.toString(response.getEntity());
+			
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		try {
+			return new JSONArray(responseBody);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+		
+	
+	public static JSONArray getCpuHistoryArray(final String id){
+		
+
+		String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/cpu/list/";
+		ApiHelper api = new ApiHelper();
+		ApiHelper.GenericCall get = api.new GenericCall();
+		
+		
+		HttpResponse response;
+		String responseBody = null;
+		
+		try {
+			response = get.execute(url).get();
+
+			responseBody = EntityUtils.toString(response.getEntity());
+			
+			
+		} catch (InterruptedException | ExecutionException | ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		try {
+			return new JSONArray(responseBody);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
 	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{
 		

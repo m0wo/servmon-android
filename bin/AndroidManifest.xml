@@ -35,6 +35,9 @@
             android:name=".UpdateService"
             android:enabled="true" />
         <service
+            android:name=".RamUpdateService"
+            android:enabled="true" />
+        <service
             android:name=".AlertService"
             android:enabled="true" />
 

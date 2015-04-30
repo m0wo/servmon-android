@@ -2,13 +2,16 @@ package pmt.servermon_android;
 
 import java.util.ArrayList;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import server_classes.Server;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class AlertService extends Service{
@@ -29,10 +32,74 @@ public class AlertService extends Service{
         }
     };
 	
+    private int averageRam(JSONArray ram){
+    	
+    	if(ram == null){
+    		return 0;
+    	}
+    	
+    	int average = 0;
+    	for(int i = 0; i < ram.length(); i++){
+    		try {
+				average += Integer.parseInt(ram.getJSONObject(i).get("used_ram").toString());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if (ram.length() != 0)
+    		average /= ram.length();
+    	
+    	return average;
+    }
+    
+    private int averageCpu(JSONArray cpu){
+    	if(cpu == null){
+    		return 0;
+    	}
+    	int average = 0;
+    	for(int i = 0; i < cpu.length(); i++){
+    		try {
+				int temp = Integer.parseInt(cpu.getJSONObject(i).get("cpu_usage_percentage").toString());
+				if (temp > 70){
+					warnCpu();
+				}
+				average += temp;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if (cpu.length() != 0)
+    		average /= cpu.length();
+    	
+    	return average;
+    }
+    
+    private void warnCpu(){
+    	NotificationCompat.Builder mBuilder =
+    		    new NotificationCompat.Builder(this)
+    		    .setSmallIcon(R.drawable.ic_launcher)
+    		    .setContentTitle("Danger")
+    		    .setContentText("CPU Usage High!");
+    	
+    	
+
+    	// Sets an ID for the notification
+    	int mNotificationId = 001;
+    	// Gets an instance of the NotificationManager service
+    	NotificationManager mNotifyMgr = 
+    	        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    	// Builds the notification and issues it.
+    	mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
+    
 	private void scanServers(){
 		for (Server server : mUserServers) {
 			//ApiHelper.getCpuHistory(id)
-			ApiHelper.getCpuHistory(server.getServerId().toString());
+			//ApiHelper.getCpuHistory(server.getServerId().toString());
+			Log.d("CPU average", "" + averageCpu(ApiHelper.getCpuHistoryArray(server.getServerId().toString())));
+			Log.d("RAM average", "" + averageRam(ApiHelper.getRamHistory(server.getServerId().toString())));
 		}
 	}
 	

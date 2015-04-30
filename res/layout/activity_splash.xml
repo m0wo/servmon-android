@@ -30,8 +30,7 @@
         android:layout_height="fill_parent"
         android:gravity="bottom"
         android:textStyle="italic"
-        android:textSize="12pt"
-        android:text="Made with love in Bournemouth."
-        android:textColor="#cccccc" />
+        android:text="Made with love by Dynamic Innovation."
+        android:textColor="#bbbbbb" />
 
 </LinearLayout>

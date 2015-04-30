@@ -1,58 +1,155 @@
 package pmt.servermon_android;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import server_classes.Server;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 public class RamActivity extends Activity {
 
-	
-	Button findMagicBtn;
-	
+	private Button findMagicBtn;
+	private Server mServer;
+	private JSONArray ramArray;
+	private LineGraphSeries<DataPoint> mSeries;
 
-	public void initGraph(){
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			try {
+				ramArray = new JSONArray(intent.getStringExtra("ramHistory"));
+				updateGraph();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	};
+
+	private void initUpdateService() {
+		Intent i = new Intent(this, RamUpdateService.class);
+		i.putExtra("id", mServer.getServerId());
+
+		startService(i);
+	}
+
+	public void initGraph() {
 		GraphView graph = (GraphView) findViewById(R.id.cpuGraph);
-		LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-		          new DataPoint(0, 1),
-		          new DataPoint(1, 5),
-		          new DataPoint(2, 3),
-		          new DataPoint(3, 2),
-		          new DataPoint(4, 6)
-		});
+		LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(
+				new DataPoint[] {
+
+				new DataPoint(0, 1), new DataPoint(1, 5), new DataPoint(2, 3),
+						new DataPoint(3, 2), new DataPoint(4, 6) });
 		graph.addSeries(series);
 	}
-	
-	public void setRamButton(){
-		findMagicBtn = (Button) findViewById(R.id.magic_btn);
-	    findMagicBtn.setOnClickListener(new View.OnClickListener() {
-	        @Override
-	        public void onClick(View v) {
-	            LinearLayout findMagicLl = (LinearLayout) findViewById(R.id.magic_layout);
-	            if (findMagicLl.getVisibility() == View.VISIBLE) {
-	                findMagicLl.setVisibility(View.GONE);
-	            } else {
-	                findMagicLl.setVisibility(View.VISIBLE);
-	            }
-	        }
-	    });
+
+	public void updateGraph() {
+		GraphView graph = (GraphView) findViewById(R.id.cpuGraph);
+
+		ArrayList<DataPoint> ramData = new ArrayList<DataPoint>();
+
+		for (int i = 0; i < ramArray.length(); i++) {
+			try {
+
+				Date tempDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+						.parse(ramArray.getJSONObject(i).get("timestamp")
+								.toString());
+				Long tempLong = Long.parseLong(ramArray.getJSONObject(i)
+						.get("used_ram").toString());
+				Log.d("Date", tempDate.toString());
+				Log.d("Ram", tempLong.toString());
+
+				ramData.add(new DataPoint(tempDate, tempLong));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(
+				ramData.toArray(new DataPoint[ramData.size()]));
+		// mSeries.resetData(ramData.toArray(new DataPoint[ramData.size()]));
+		graph.addSeries(series);
+
+		graph.getGridLabelRenderer().setLabelFormatter(
+				new DateAsXAxisLabelFormatter(this));
+		graph.getGridLabelRenderer().setNumHorizontalLabels(ramArray.length()); // only 4
+																// because of
+																// the space
+
+		try {
+			graph.getViewport().setMinX(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			.parse(ramArray.getJSONObject(0).get("timestamp").toString()).getTime());
+			
+			
+			graph.getViewport().setMaxX(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			.parse(ramArray.getJSONObject(ramArray.length() - 1).get("timestamp").toString()).getTime());
+			
+		} catch (ParseException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+
+		graph.getViewport().setXAxisBoundsManual(true);
 	}
-	
-	
+
+	public void setRamButton() {
+		findMagicBtn = (Button) findViewById(R.id.magic_btn);
+		findMagicBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LinearLayout findMagicLl = (LinearLayout) findViewById(R.id.magic_layout);
+				if (findMagicLl.getVisibility() == View.VISIBLE) {
+					findMagicLl.setVisibility(View.GONE);
+				} else {
+					findMagicLl.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ram);
+		Intent i = getIntent();
+		mServer = i.getParcelableExtra("server");
+		registerReceiver(receiver, new IntentFilter("pmt.servermon_android"));
+		mSeries = new LineGraphSeries<>();
+		initUpdateService();
 		initGraph();
 		setRamButton();
-		
+
 	}
 
 	@Override

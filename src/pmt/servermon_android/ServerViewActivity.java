@@ -60,12 +60,18 @@ public class ServerViewActivity extends Activity {
 	
 	public void launchRamView(View v){
 		Intent intent = new Intent(this, RamActivity.class);
+		intent.putExtra("server", mServer);
 		startActivity(intent);
 	}
 	
 	public void launchDiskView(View v){
 		Intent intent = new Intent(this, DiskActivity.class);
 		startActivity(intent);		
+	}
+	
+	public void launchNetworkView(View v){
+		Intent intent = new Intent(this, NetworkActivity.class);
+		startActivity(intent);	
 	}
 
 	public String getToken() {
@@ -151,8 +157,8 @@ public class ServerViewActivity extends Activity {
 		registerReceiver(receiver, new IntentFilter("pmt.servermon_android"));
 
 		initUpdateService();
-		// updateStats();
-		// updateView();
+		updateStats();
+		updateView();
 
 	}
 

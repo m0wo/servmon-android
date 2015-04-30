@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
 			ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
 			
 			
-			//initAlertService(servers);
+			initAlertService(servers);
 			
 			
 			lvServers = (ListView) findViewById(R.id.lvServers);

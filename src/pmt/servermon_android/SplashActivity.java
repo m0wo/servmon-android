@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -19,7 +20,13 @@ public class SplashActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         
-      //Remove title bar
+        
+        
+        //GOOD ENOUGH FOR THE DEMO LOL!
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+      
+        //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         //Remove notification bar

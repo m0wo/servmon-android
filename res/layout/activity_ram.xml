@@ -10,14 +10,14 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tvRamTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvRamTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medium Text"
