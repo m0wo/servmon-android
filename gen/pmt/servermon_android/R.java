@@ -28,6 +28,7 @@ public final class R {
         public static final int ic_launcher=0x7f020003;
     }
     public static final class id {
+        public static final int action_logout=0x7f080028;
         public static final int action_settings=0x7f080027;
         public static final int btnLogin=0x7f080012;
         public static final int cpuGraph=0x7f080002;

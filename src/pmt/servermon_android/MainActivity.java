@@ -114,7 +114,22 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		
+		
+		
+		
 		return true;
+	}
+	
+	public void logOut(){
+		
+		
+		this.getSharedPreferences("prefs", 0).edit().clear().commit(); 
+		
+		//sharedpreferences.edit().remove("token");
+		checkAuth();
+		//Destroy key
+		//Redirect to login activity
 	}
 
 	@Override
@@ -125,6 +140,8 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}else if(id == R.id.action_logout){
+			logOut();
 		}
 		return super.onOptionsItemSelected(item);
 	}

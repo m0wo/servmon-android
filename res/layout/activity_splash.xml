@@ -31,6 +31,6 @@
         android:gravity="bottom"
         android:textStyle="italic"
         android:text="Made with love by Dynamic Innovation."
-        android:textColor="#bbbbbb" />
+         />
 
 </LinearLayout>

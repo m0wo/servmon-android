@@ -47,7 +47,7 @@ public class ServerViewActivity extends Activity {
 			
 			updateView(intent.getParcelableExtra("ram").toString(), intent
 					.getParcelableExtra("cpu").toString(), intent
-					.getParcelableArrayListExtra("disk").toString(), intent
+					.getParcelableArrayListExtra("disk").get(0).toString(), intent
 					.getParcelableExtra("network").toString());
 		}
 
@@ -55,23 +55,23 @@ public class ServerViewActivity extends Activity {
 	
 	public void launchCpuView(View v){
 		Intent intent = new Intent(this, CpuActivity.class);
-		startActivity(intent);
+		//startActivity(intent);
 	}
 	
 	public void launchRamView(View v){
 		Intent intent = new Intent(this, RamActivity.class);
 		intent.putExtra("server", mServer);
-		startActivity(intent);
+		//startActivity(intent);
 	}
 	
 	public void launchDiskView(View v){
 		Intent intent = new Intent(this, DiskActivity.class);
-		startActivity(intent);		
+		//startActivity(intent);		
 	}
 	
 	public void launchNetworkView(View v){
 		Intent intent = new Intent(this, NetworkActivity.class);
-		startActivity(intent);	
+		//startActivity(intent);	
 	}
 
 	public String getToken() {
@@ -107,7 +107,8 @@ public class ServerViewActivity extends Activity {
 		ramTv.setText(mRam.toString());
 		cpuTv.setText(mCpu.toString());
 		netTv.setText(mNet.toString());
-		updateDiskView();
+		diskTv.setText(mDisk.toString());
+		//updateDiskView();
 	}
 
 	private void updateView(String ram, String cpu, String disks, String net) {
@@ -121,8 +122,8 @@ public class ServerViewActivity extends Activity {
 		mRam = ApiHelper.getRam(mServer.getServerId());
 		mCpu = ApiHelper.getCpu(mServer.getServerId());
 		mCpus = ApiHelper.getCpus(mServer.getServerId());
-		// mDisk = ApiHelper.getDisk(mServer.getServerId());
-		mDisks = ApiHelper.getDisks(mServer.getServerId());
+		mDisk = ApiHelper.getDisks(mServer.getServerId()).get(0);
+		//mDisks = ApiHelper.getDisks(mServer.getServerId()).get(0);
 		mNet = ApiHelper.getNetwork(mServer.getServerId());
 	}
 
