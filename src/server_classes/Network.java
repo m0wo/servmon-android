@@ -1,6 +1,9 @@
 package server_classes;
 
-public class Network {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Network implements Parcelable {
 	
 	private String hostname;
 	private String ipAddress;
@@ -79,4 +82,41 @@ public class Network {
 				+ ", uploadTotal=" + uploadTotal + ", downloadTotal="
 				+ downloadTotal + "]";
 	}	
+
+    protected Network(Parcel in) {
+        hostname = in.readString();
+        ipAddress = in.readString();
+        gateway = in.readString();
+        publicIp = in.readString();
+        uploadTotal = in.readString();
+        downloadTotal = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(hostname);
+        dest.writeString(ipAddress);
+        dest.writeString(gateway);
+        dest.writeString(publicIp);
+        dest.writeString(uploadTotal);
+        dest.writeString(downloadTotal);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Network> CREATOR = new Parcelable.Creator<Network>() {
+        @Override
+        public Network createFromParcel(Parcel in) {
+            return new Network(in);
+        }
+
+        @Override
+        public Network[] newArray(int size) {
+            return new Network[size];
+        }
+    };
 }

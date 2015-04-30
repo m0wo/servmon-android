@@ -449,12 +449,10 @@ public class ApiHelper {
 			String responseBody = EntityUtils.toString(response.getEntity());
 			JSONObject cpuObj;
 			
-			JSONArray cpuArray = new JSONArray(responseBody);
-			
-			cpuObj = cpuArray.getJSONObject(0);
+			cpuObj = new JSONObject(responseBody);
 			
 			
-			cpu.setId(cpuObj.getString("id"));
+			//cpu.setId(cpuObj.getString("id"));
 			cpu.setVendor(cpuObj.getString("vendor"));
 			cpu.setModel(cpuObj.getString("model"));
 			cpu.setClock_speed(cpuObj.getString("clock_speed"));
@@ -507,6 +505,63 @@ public class ApiHelper {
 		}
 		
 		return cpus;
+	}
+	
+	public static void getCpuHistory(final String id){
+		Runnable run = new Runnable(){
+
+			@Override
+			public void run() {
+				String url = "http://student20265.201415.uk/pmt/api/user/server/" + id + "/cpu/list/";
+				ApiHelper api = new ApiHelper();
+				ApiHelper.GenericCall get = api.new GenericCall();
+				
+				ArrayList<Cpu> cpus = new ArrayList<Cpu>();
+				int averageCpu = 0;
+				
+				
+				Cpu cpu = new Cpu();
+				
+				HttpResponse response;
+				String responseBody = null;
+				
+				try {
+					response = get.execute(url).get();
+
+					responseBody = EntityUtils.toString(response.getEntity());
+					
+					
+				} catch (InterruptedException | ExecutionException | ParseException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+				}
+				
+				
+				JSONArray cpuHistory = null;
+				
+				try {
+					cpuHistory = new JSONArray(responseBody);
+					
+					
+					for(int i = 0; i < cpuHistory.length(); i++){
+						
+						if(cpuHistory.getJSONObject(i).equals(null))
+							break;
+						
+						averageCpu += cpuHistory.getJSONObject(i).getInt("cpu_usage_percentage");						
+					}
+					averageCpu /= cpuHistory.length();
+					Log.d("AVERAGE CPU USAGE of " + id, "" + averageCpu);
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+				}
+				
+			}
+			
+		};
+		new Thread(run).start();
 	}
 	
 	public static String login(String email, String password) throws InterruptedException, ExecutionException{

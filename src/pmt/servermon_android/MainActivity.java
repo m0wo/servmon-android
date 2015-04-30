@@ -51,6 +51,14 @@ public class MainActivity extends Activity {
 
 		return result;
 	}
+	
+	private void initAlertService(ArrayList<Server> servers){
+		Intent i = new Intent(this, AlertService.class);
+		i.putParcelableArrayListExtra("servers", servers);
+		
+		startService(i);
+		
+	}
 
 	private void openServerPage(Server s) {
 		Intent intent = new Intent(this, ServerViewActivity.class);
@@ -87,6 +95,7 @@ public class MainActivity extends Activity {
 
 		if (checkAuth()) {
 			ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
+			initAlertService(servers);
 			lvServers = (ListView) findViewById(R.id.lvServers);
 
 			mAdapter = new ServerAdapter(this, servers);

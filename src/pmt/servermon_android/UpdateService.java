@@ -21,18 +21,15 @@ public class UpdateService extends Service {
                 Intent intent = new Intent("pmt.servermon_android");
                 Log.d("ServerId", mServerId);
                 
-                
-                
                 Log.d("Ram", ApiHelper.getRam(mServerId).toString());
                 Log.d("Cpu", ApiHelper.getCpu(mServerId).toString());
                 Log.d("Disk", ApiHelper.getDisks(mServerId).toString());
-                Log.d("Network", ApiHelper.getNetwork(mServerId).toString());
+                Log.d("Network", ApiHelper.getNetwork(mServerId).toString());      
                 
-                intent.putExtra("ram", ApiHelper.getRam(mServerId).toString());
-                intent.putExtra("cpu", ApiHelper.getCpu(mServerId).toString());
-                intent.putExtra("disk", ApiHelper.getDisks(mServerId).toString());
-                intent.putExtra("network", ApiHelper.getNetwork(mServerId).toString());
-                
+                intent.putExtra("ram", ApiHelper.getRam(mServerId));
+                intent.putExtra("cpu", ApiHelper.getCpu(mServerId));
+                intent.putParcelableArrayListExtra("disk", ApiHelper.getDisks(mServerId));
+                intent.putExtra("network", ApiHelper.getNetwork(mServerId));
                 sendBroadcast(intent);
                 
             }

@@ -1,6 +1,9 @@
 package server_classes;
 
-public class Cpu {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Cpu implements Parcelable {
 	
 	private String id;
 	private String vendor;
@@ -70,4 +73,39 @@ public class Cpu {
 	}
 	
 	
+
+    protected Cpu(Parcel in) {
+        id = in.readString();
+        vendor = in.readString();
+        model = in.readString();
+        clock_speed = in.readString();
+        cpu_usage_percentage = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(vendor);
+        dest.writeString(model);
+        dest.writeString(clock_speed);
+        dest.writeString(cpu_usage_percentage);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Cpu> CREATOR = new Parcelable.Creator<Cpu>() {
+        @Override
+        public Cpu createFromParcel(Parcel in) {
+            return new Cpu(in);
+        }
+
+        @Override
+        public Cpu[] newArray(int size) {
+            return new Cpu[size];
+        }
+    };
 }

@@ -1,6 +1,9 @@
 package server_classes;
 
-public class Ram {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Ram implements Parcelable {
 	
 	private String totalRam;
 	private String usedRam;
@@ -52,4 +55,35 @@ public class Ram {
 		return "Ram [totalRam=" + totalRam + ", usedRam=" + usedRam
 				+ ", timeStamp=" + timeStamp + "]";
 	}
+
+    protected Ram(Parcel in) {
+        totalRam = in.readString();
+        usedRam = in.readString();
+        timeStamp = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(totalRam);
+        dest.writeString(usedRam);
+        dest.writeString(timeStamp);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Ram> CREATOR = new Parcelable.Creator<Ram>() {
+        @Override
+        public Ram createFromParcel(Parcel in) {
+            return new Ram(in);
+        }
+
+        @Override
+        public Ram[] newArray(int size) {
+            return new Ram[size];
+        }
+    };
 }

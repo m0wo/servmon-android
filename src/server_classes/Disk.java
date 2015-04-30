@@ -1,7 +1,9 @@
 package server_classes;
 
-public class Disk {
-//[{"id":1,"total_space":52000,"remaining_space":35543,"read_speed":25000,"write_speed":35000},{"id":2,"total_space":320000,"remaining_space":44300,"read_speed":28000,"write_speed":34000}]
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Disk implements Parcelable {
 
 	private String id;
 	private String totalSpace;
@@ -71,4 +73,39 @@ public class Disk {
 	}
 	
 	
+
+    protected Disk(Parcel in) {
+        id = in.readString();
+        totalSpace = in.readString();
+        remainingSpace = in.readString();
+        readSpeed = in.readString();
+        writeSpeed = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(totalSpace);
+        dest.writeString(remainingSpace);
+        dest.writeString(readSpeed);
+        dest.writeString(writeSpeed);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Disk> CREATOR = new Parcelable.Creator<Disk>() {
+        @Override
+        public Disk createFromParcel(Parcel in) {
+            return new Disk(in);
+        }
+
+        @Override
+        public Disk[] newArray(int size) {
+            return new Disk[size];
+        }
+    };
 }
