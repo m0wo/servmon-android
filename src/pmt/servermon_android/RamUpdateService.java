@@ -17,8 +17,9 @@ public class RamUpdateService extends Service {
         public void run() {
             if (serviceStopped == false)
             {
-            	Intent intent = new Intent("pmt.servermon_android");
+            	Intent intent = new Intent("pmt.servermon_android.ramUpdate");
             	String result = ApiHelper.getRamHistory(mServerId).toString();
+            	Log.d("broadcunt",result);
                 intent.putExtra("ramHistory", result);
                 
                 sendBroadcast(intent);

@@ -154,7 +154,7 @@ public class ServerViewActivity extends Activity {
 
 		// Server s = ApiHelper.getServer(mToken, mServer.getServerId());
 
-		registerReceiver(receiver, new IntentFilter("pmt.servermon_android"));
+		registerReceiver(receiver, new IntentFilter("pmt.servermon_android.updateserver"));
 
 		initUpdateService();
 		updateStats();

@@ -52,8 +52,7 @@ public class Ram implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "Ram [totalRam=" + totalRam + ", usedRam=" + usedRam
-				+ ", timeStamp=" + timeStamp + "]";
+		return "Total Ram: " + totalRam + "MB";
 	}
 
     protected Ram(Parcel in) {

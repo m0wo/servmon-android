@@ -67,9 +67,18 @@ public class Cpu implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "Cpu [id=" + id + ", vendor=" + vendor + ", model=" + model
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Model: " + model + "\n");
+		sb.append("Usage: " + cpu_usage_percentage + "%");
+		
+		/*return "Cpu [id=" + id + ", vendor=" + vendor + ", model=" + model
 				+ ", clock_speed=" + clock_speed + ", cpu_usage_percentage="
-				+ cpu_usage_percentage + "]";
+				+ cpu_usage_percentage + "]";*/
+		
+		return sb.toString();
+		
+		
 	}
 	
 	

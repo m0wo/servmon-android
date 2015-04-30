@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class RamActivity extends Activity {
 
 		ArrayList<DataPoint> ramData = new ArrayList<DataPoint>();
 
-		for (int i = 0; i < ramArray.length(); i++) {
+		for (int i = 0; i < 4; i++) {
 			try {
 
 				Date tempDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -100,7 +101,7 @@ public class RamActivity extends Activity {
 
 		graph.getGridLabelRenderer().setLabelFormatter(
 				new DateAsXAxisLabelFormatter(this));
-		graph.getGridLabelRenderer().setNumHorizontalLabels(ramArray.length()); // only 4
+		graph.getGridLabelRenderer().setNumHorizontalLabels(4); // only 4
 																// because of
 																// the space
 
@@ -140,11 +141,15 @@ public class RamActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        //GOOD ENOUGH FOR THE DEMO LOL!
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ram);
 		Intent i = getIntent();
 		mServer = i.getParcelableExtra("server");
-		registerReceiver(receiver, new IntentFilter("pmt.servermon_android"));
+		registerReceiver(receiver, new IntentFilter("pmt.servermon_android.ramUpdate"));
 		mSeries = new LineGraphSeries<>();
 		initUpdateService();
 		initGraph();

@@ -67,9 +67,13 @@ public class Disk implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "Disk [id=" + id + ", totalSpace=" + totalSpace
-				+ ", remainingSpace=" + remainingSpace + ", readSpeed="
-				+ readSpeed + ", writeSpeed=" + writeSpeed + "]";
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Disk ID: " + id + "\n");
+		sb.append("Total Space: " + totalSpace + "\n");
+		sb.append("Remaining Space: " + remainingSpace);
+		
+		return sb.toString();
 	}
 	
 	

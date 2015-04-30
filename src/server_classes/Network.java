@@ -77,10 +77,15 @@ public class Network implements Parcelable {
 
 	@Override
 	public String toString() {
-		return "Network [hostname=" + hostname + ", ipAddress=" + ipAddress
-				+ ", gateway=" + gateway + ", publicIp=" + publicIp
-				+ ", uploadTotal=" + uploadTotal + ", downloadTotal="
-				+ downloadTotal + "]";
+		StringBuilder sb = new StringBuilder();
+		sb.append("Hostname: " + hostname + "\n");
+		sb.append("Network IP: " + ipAddress + "\n");
+		sb.append("Public IP: " + publicIp + "\n");
+		sb.append("Download: " + downloadTotal + "kb/s" + "\n");
+		sb.append("Upload: " + uploadTotal + "kb/s" + "\n");
+		
+
+		return sb.toString();
 	}	
 
     protected Network(Parcel in) {

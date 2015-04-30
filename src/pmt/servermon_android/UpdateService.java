@@ -18,7 +18,7 @@ public class UpdateService extends Service {
         public void run() {
             if (serviceStopped == false)
             {
-                Intent intent = new Intent("pmt.servermon_android");
+                Intent intent = new Intent("pmt.servermon_android.updateserver");
                 Log.d("ServerId", mServerId);
                 
                 Log.d("Ram", ApiHelper.getRam(mServerId).toString());

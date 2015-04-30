@@ -34,12 +34,14 @@ public class AlertService extends Service{
 	
     private int averageRam(JSONArray ram){
     	
+    	int averageSize = 8;
+    	
     	if(ram == null){
     		return 0;
     	}
     	
     	int average = 0;
-    	for(int i = 0; i < ram.length(); i++){
+    	for(int i = 0; i < averageSize; i++){
     		try {
 				average += Integer.parseInt(ram.getJSONObject(i).get("used_ram").toString());
 			} catch (JSONException e) {
@@ -47,13 +49,13 @@ public class AlertService extends Service{
 				e.printStackTrace();
 			}
     	}
-    	if (ram.length() != 0)
-    		average /= ram.length();
+    	
+    	average /= averageSize;
     	
     	return average;
     }
     
-    private int averageCpu(JSONArray cpu){
+    private int averageCpu(String name, JSONArray cpu){
     	if(cpu == null){
     		return 0;
     	}
@@ -61,30 +63,32 @@ public class AlertService extends Service{
     	for(int i = 0; i < cpu.length(); i++){
     		try {
 				int temp = Integer.parseInt(cpu.getJSONObject(i).get("cpu_usage_percentage").toString());
-				if (temp > 70){
-					warnCpu();
-				}
+
 				average += temp;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
-    	if (cpu.length() != 0)
+    	if (cpu.length() != 0){
     		average /= cpu.length();
+    		
+			if (average > 80){
+				warnCpu(name);
+			}
+    	}
     	
     	return average;
     }
     
-    private void warnCpu(){
+    private void warnCpu(String name){
     	NotificationCompat.Builder mBuilder =
     		    new NotificationCompat.Builder(this)
     		    .setSmallIcon(R.drawable.ic_launcher)
     		    .setContentTitle("Danger")
-    		    .setContentText("CPU Usage High!");
+    		    .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+    		    .setContentText(name + " CPU Usage High!");
     	
-    	
-
     	// Sets an ID for the notification
     	int mNotificationId = 001;
     	// Gets an instance of the NotificationManager service
@@ -98,8 +102,8 @@ public class AlertService extends Service{
 		for (Server server : mUserServers) {
 			//ApiHelper.getCpuHistory(id)
 			//ApiHelper.getCpuHistory(server.getServerId().toString());
-			Log.d("CPU average", "" + averageCpu(ApiHelper.getCpuHistoryArray(server.getServerId().toString())));
-			Log.d("RAM average", "" + averageRam(ApiHelper.getRamHistory(server.getServerId().toString())));
+			Log.d("CPU average", "" + averageCpu(server.getServerName(), ApiHelper.getCpuHistoryArray(server.getServerId().toString())));
+			//Log.d("RAM average", "" + averageRam(ApiHelper.getRamHistory(server.getServerId().toString())));
 		}
 	}
 	
