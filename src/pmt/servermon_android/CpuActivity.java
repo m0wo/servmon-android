@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class CpuActivity extends Activity {
+	
+	Button findMagicBtn;
 	
 	public void initGraph(){
 		GraphView graph = (GraphView) findViewById(R.id.cpuGraph);
@@ -23,11 +28,28 @@ public class CpuActivity extends Activity {
 		graph.addSeries(series);
 	}
 	
+	
+	public void setCpuButton(){
+		findMagicBtn = (Button) findViewById(R.id.magic_btn);
+	    findMagicBtn.setOnClickListener(new View.OnClickListener() {
+	        @Override
+	        public void onClick(View v) {
+	            LinearLayout findMagicLl = (LinearLayout) findViewById(R.id.magic_layout);
+	            if (findMagicLl.getVisibility() == View.VISIBLE) {
+	                findMagicLl.setVisibility(View.GONE);
+	            } else {
+	                findMagicLl.setVisibility(View.VISIBLE);
+	            }
+	        }
+	    });
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cpu);
 		initGraph();
+		setCpuButton();
 	}
 
 	

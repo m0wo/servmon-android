@@ -95,7 +95,11 @@ public class MainActivity extends Activity {
 
 		if (checkAuth()) {
 			ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
-			initAlertService(servers);
+			
+			
+			//initAlertService(servers);
+			
+			
 			lvServers = (ListView) findViewById(R.id.lvServers);
 
 			mAdapter = new ServerAdapter(this, servers);

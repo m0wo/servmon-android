@@ -30,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="RAM"
+        android:onClick="launchRamView"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Disks"
+        android:onClick="launchDiskView"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView

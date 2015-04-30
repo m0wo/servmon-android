@@ -10,5 +10,6 @@
     <string name="title_activity_cpu">CpuActivity</string>
     <string name="title_activity_disk">DiskActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_network">NetworkActivity</string>
 
 </resources>
