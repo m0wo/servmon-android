@@ -30,7 +30,6 @@ public class ServerAdapter extends ArrayAdapter<Server>{
             convertView = inflater.inflate(R.layout.server_row, parent, false);
         }
         TextView tvName = (TextView)convertView.findViewById(R.id.tvServername);
-        //TODO: add date and index
         
         tvName.setText(server.getServerName());
         

@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 
 		return result;
 	}
-
+	//initialize background processing thread
 	private void initAlertService(ArrayList<Server> servers) {
 		Intent i = new Intent(this, AlertService.class);
 		i.putParcelableArrayListExtra("servers", servers);
@@ -60,13 +60,14 @@ public class MainActivity extends Activity {
 		startService(i);
 
 	}
-
+	//open the server page for the selected server
 	private void openServerPage(Server s) {
 		Intent intent = new Intent(this, ServerViewActivity.class);
 		intent.putExtra("server", s);
 		startActivity(intent);
 	}
 
+	//add onclicklisteners to each listview item
 	private void setOnClick() {
 
 		lvServers.setOnItemClickListener(new OnItemClickListener() {
