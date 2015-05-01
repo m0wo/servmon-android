@@ -53,27 +53,6 @@ public class ServerViewActivity extends Activity {
 
 	};
 
-	public void launchCpuView(View v) {
-		Intent intent = new Intent(this, CpuActivity.class);
-		// startActivity(intent);
-	}
-
-	public void launchRamView(View v) {
-		Intent intent = new Intent(this, RamActivity.class);
-		intent.putExtra("server", mServer);
-		// startActivity(intent);
-	}
-
-	public void launchDiskView(View v) {
-		Intent intent = new Intent(this, DiskActivity.class);
-		// startActivity(intent);
-	}
-
-	public void launchNetworkView(View v) {
-		Intent intent = new Intent(this, NetworkActivity.class);
-		// startActivity(intent);
-	}
-
 	public String getToken() {
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
 				Context.MODE_PRIVATE);

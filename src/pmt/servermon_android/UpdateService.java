@@ -20,13 +20,6 @@ public class UpdateService extends Service {
             if (serviceStopped == false)
             {
                 Intent intent = new Intent("pmt.servermon_android.updateserver");
-                Log.d("ServerId", mServerId);
-                
-                Log.d("Ram", mHelper.getRam(mServerId).toString());
-                Log.d("Cpu", mHelper.getCpu(mServerId).toString());
-                Log.d("Disk", mHelper.getDisks(mServerId).toString());
-                Log.d("Network", mHelper.getNetwork(mServerId).toString());      
-                
                 intent.putExtra("ram", mHelper.getRam(mServerId));
                 intent.putExtra("cpu", mHelper.getCpu(mServerId));
                 intent.putParcelableArrayListExtra("disk", mHelper.getDisks(mServerId));

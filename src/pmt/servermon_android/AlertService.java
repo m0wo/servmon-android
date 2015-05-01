@@ -92,17 +92,11 @@ public class AlertService extends Service{
     
     private void warnCpu(String name){
     	
-    	Log.d("cheeky cunt!", Uri.parse("file://" + 
-    		    Environment.DIRECTORY_DOWNLOADS + File.separator + "airporn.mp3").toString()
-    			);
-    	
     	NotificationCompat.Builder mBuilder =
     		    new NotificationCompat.Builder(this)
     		    .setSmallIcon(R.drawable.heart_monitor_white)
     		    .setContentTitle("Danger")
     		    .setDefaults(Notification.DEFAULT_SOUND)
-    		    .setSound(Uri.parse("file://" + 
-    	    		    Environment.DIRECTORY_DOWNLOADS + File.separator + "airporn.mp3"))
     		    .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
     		    .setContentText(name + " CPU Usage High!");
     	
