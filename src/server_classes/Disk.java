@@ -3,6 +3,7 @@ package server_classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//disk class
 public class Disk implements Parcelable {
 
 	private String id;

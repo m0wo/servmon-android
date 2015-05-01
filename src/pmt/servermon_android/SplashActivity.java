@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+//splash screen shown before the app begins, more of a cosmetic thing than any actual value
+//background processing could be initialized here for better perfomance
 public class SplashActivity extends Activity {
 
     @Override
@@ -18,6 +20,7 @@ public class SplashActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         
+        //A handler is used, so that a delay can be added before launching the main activity
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+//Extremely basic adapter for server objects, can be extended easily
 public class ServerAdapter extends ArrayAdapter<Server>{
 
 	public ServerAdapter(Context context,  ArrayList<Server> servers) {

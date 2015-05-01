@@ -24,16 +24,19 @@ import server_classes.Server;
 import android.os.AsyncTask;
 import android.util.Log;
 
+//Calls to the API, see endpoints document for more details
 public class ApiHelper {
 
+	//the user token used for auth
 	public static JSONObject mToken;
-
+	//the url of the api
 	private final String mApiUrl = "http://student20265.201415.uk/pmt/api";
 
 	public ApiHelper() {
 
 	}
 
+	//AsyncTask to authorize a user, returns the response of a username and password
 	final class AuthTask extends AsyncTask<String, Integer, HttpResponse> {
 
 		HttpClient httpClient = new DefaultHttpClient();
@@ -71,6 +74,7 @@ public class ApiHelper {
 
 	}
 
+	//generic api call to the server, returns the request as a HttpResponse
 	final class GenericCall extends AsyncTask<String, Integer, HttpResponse> {
 
 		HttpClient httpClient = new DefaultHttpClient();
@@ -100,6 +104,7 @@ public class ApiHelper {
 
 	}
 
+	//convert a json object to a server object
 	private Server jsonToServer(JSONObject json) {
 		Log.d("Server", json.toString());
 		Server server = null;
@@ -365,13 +370,6 @@ public class ApiHelper {
 		return cpus;
 	}
 
-	/**
-	 * 
-	 * 
-	 * come back to this
-	 * 
-	 * @param id
-	 */
 	public void getCpuHistory(final String id) {
 		Runnable run = new Runnable() {
 

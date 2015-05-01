@@ -3,6 +3,7 @@ package server_classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//ram class
 public class Ram implements Parcelable {
 	
 	private String totalRam;

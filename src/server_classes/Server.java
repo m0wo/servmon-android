@@ -3,6 +3,7 @@ package server_classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//server class
 public class Server implements Parcelable {
 	
 	private String serverId;

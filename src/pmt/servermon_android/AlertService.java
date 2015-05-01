@@ -27,6 +27,7 @@ public class AlertService extends Service{
 	private boolean alert = false;
 	private ApiHelper mHelper;
 	
+    //Background thread
     private Runnable updateRunnable = new Runnable() {
         @Override
         public void run() {
@@ -38,6 +39,7 @@ public class AlertService extends Service{
         }
     };
 	
+    //take in a cpu json array, find the average ram usage
     private int averageRam(JSONArray ram){
     	
     	int averageSize = 8;
@@ -61,6 +63,7 @@ public class AlertService extends Service{
     	return average;
     }
     
+    //take in a cpu json array, find the average cpu usage
     private int averageCpu(String name, JSONArray cpu){
     	if(cpu == null){
     		return 0;
@@ -90,6 +93,7 @@ public class AlertService extends Service{
     	return average;
     }
     
+    //build a notification displaying the cpu name and display it
     private void warnCpu(String name){
     	
     	NotificationCompat.Builder mBuilder =
@@ -110,6 +114,7 @@ public class AlertService extends Service{
     	alert = true;
     }
     
+    //scan all of the user servers and check their state
 	private void scanServers(){
 		for (Server server : mUserServers) {
 			//ApiHelper.getCpuHistory(id)
@@ -119,8 +124,9 @@ public class AlertService extends Service{
 		}
 	}
 	
+    //needed to loop the background processing
     private void queueRunnable() {
-        mHandler.postDelayed(updateRunnable, 5000);
+        mHandler.postDelayed(updateRunnable, 5000); //every five seconds
     }
     
 	@Override

@@ -3,6 +3,7 @@ package server_classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//network class
 public class Network implements Parcelable {
 	
 	private String hostname;

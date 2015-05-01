@@ -3,6 +3,7 @@ package server_classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//cpu class
 public class Cpu implements Parcelable {
 	
 	private String id;

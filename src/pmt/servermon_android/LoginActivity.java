@@ -17,7 +17,8 @@ import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class LoginActivity extends Activity {
-	
+
+	//authorize the user and set the token in shared preferences (on success)
 	public void loginButton(View v){
 		String email = ((EditText) findViewById(R.id.etEmail)).getEditableText().toString();
 		String password = ((EditText) findViewById(R.id.etPassword)).getEditableText().toString();

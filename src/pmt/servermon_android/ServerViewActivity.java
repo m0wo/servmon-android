@@ -20,25 +20,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+//view to display server stats
 public class ServerViewActivity extends Activity {
 
-	private Server mServer;
-	private Ram mRam;
-	private Cpu mCpu;
-	private Disk mDisk;
-	private Network mNet;
+	private Server mServer;	//the server being viewed
+	private Ram mRam;	//the ram of the server
+	private Cpu mCpu;	//the cpu of the server
+	private Disk mDisk;	//the disk of the server
+	private Network mNet;	//the network of the server
 
-	private ArrayList<Disk> mDisks;
-	private ArrayList<Cpu> mCpus;
+	private ArrayList<Disk> mDisks;	//an arraylist for multiple disks
+	private ArrayList<Cpu> mCpus;	//an arraylist for multiple cpus
 
-	private String mToken;
+	private String mToken;	//token used for authorization
 
-	private TextView ramTv;
-	private TextView cpuTv;
+	private TextView ramTv;	
+	private TextView cpuTv;	
 	private TextView diskTv;
-	private TextView netTv;
+	private TextView netTv;	
 	private TextView tvServerName;
 
+	//receive and handle results from background processing, update views as needed
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 
 		@Override
@@ -53,6 +55,7 @@ public class ServerViewActivity extends Activity {
 
 	};
 
+	//get the token from shared preferences
 	public String getToken() {
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
 				Context.MODE_PRIVATE);
@@ -60,6 +63,7 @@ public class ServerViewActivity extends Activity {
 		return sharedpreferences.getString("token", null);
 	}
 
+	//initialize the textview objects
 	private void initView() {
 		ramTv = (TextView) findViewById(R.id.tvRamInfo);
 		cpuTv = (TextView) findViewById(R.id.tvCpuInfo);
@@ -70,7 +74,7 @@ public class ServerViewActivity extends Activity {
 
 		tvServerName.setText(mServer.getServerName());
 	}
-
+	//update the disk textview
 	private void updateDiskView() {
 
 		StringBuilder sb = new StringBuilder();
@@ -81,7 +85,7 @@ public class ServerViewActivity extends Activity {
 		}
 		diskTv.setText(sb.toString());
 	}
-
+	//update the entire view
 	private void updateView() {
 		ramTv.setText(mRam.toString());
 		cpuTv.setText(mCpu.toString());
@@ -89,14 +93,14 @@ public class ServerViewActivity extends Activity {
 		diskTv.setText(mDisk.toString());
 		// updateDiskView();
 	}
-
+	//update the entire view using strings
 	private void updateView(String ram, String cpu, String disks, String net) {
 		ramTv.setText(ram);
 		cpuTv.setText(cpu);
 		netTv.setText(net);
 		diskTv.setText(disks);
 	}
-
+	//set up the update background service
 	private void initUpdateService() {
 		Intent i = new Intent(this, UpdateService.class);
 		i.putExtra("id", mServer.getServerId());

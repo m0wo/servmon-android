@@ -7,13 +7,15 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+//background processing to grab info about a server
 public class UpdateService extends Service {
 	
 	private Handler mHandler;
     private boolean serviceStopped;
-    private String mServerId;
+    private String mServerId;	//id of the server being viewed
     private ApiHelper mHelper;
     
+    //background thread
     private Runnable updateRunnable = new Runnable() {
         @Override
         public void run() {
@@ -30,7 +32,7 @@ public class UpdateService extends Service {
             queueRunnable();
         }
     };
-    
+    //needed to loop, recursion could be used instead...but readbility
     private void queueRunnable() {
         mHandler.postDelayed(updateRunnable, 1000);
     }

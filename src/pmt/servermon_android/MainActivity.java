@@ -23,10 +23,11 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private String mToken;
-	private ListView lvServers;
-	private ServerAdapter mAdapter;
+	private String mToken;	//token sent to api calls
+	private ListView lvServers;	//listview of user's servers
+	private ServerAdapter mAdapter;	//adapter to display server name
 
+	//redirect to login if user token is not set in shared preferences
 	private boolean checkAuth() {
 		boolean result = false;
 		SharedPreferences sharedpreferences = getSharedPreferences("prefs",
