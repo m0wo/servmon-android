@@ -1,14 +1,18 @@
 package pmt.servermon_android;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import server_classes.Server;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -20,6 +24,8 @@ public class AlertService extends Service{
 	private Handler mHandler;
     private boolean serviceStopped;
 	private ArrayList<Server> mUserServers;
+	private boolean alert = false;
+	private ApiHelper mHelper;
 	
     private Runnable updateRunnable = new Runnable() {
         @Override
@@ -60,7 +66,7 @@ public class AlertService extends Service{
     		return 0;
     	}
     	int average = 0;
-    	for(int i = 0; i < cpu.length(); i++){
+    	for(int i = 0; i < 4; i++){
     		try {
 				int temp = Integer.parseInt(cpu.getJSONObject(i).get("cpu_usage_percentage").toString());
 
@@ -70,22 +76,33 @@ public class AlertService extends Service{
 				e.printStackTrace();
 			}
     	}
-    	if (cpu.length() != 0){
-    		average /= cpu.length();
-    		
-			if (average > 80){
+    	
+    	average /= 4;
+    	
+
+		if (average > 80){
+			if (alert == false){
 				warnCpu(name);
 			}
-    	}
+		}
+
     	
     	return average;
     }
     
     private void warnCpu(String name){
+    	
+    	Log.d("cheeky cunt!", Uri.parse("file://" + 
+    		    Environment.DIRECTORY_DOWNLOADS + File.separator + "airporn.mp3").toString()
+    			);
+    	
     	NotificationCompat.Builder mBuilder =
     		    new NotificationCompat.Builder(this)
-    		    .setSmallIcon(R.drawable.ic_launcher)
+    		    .setSmallIcon(R.drawable.heart_monitor_white)
     		    .setContentTitle("Danger")
+    		    .setDefaults(Notification.DEFAULT_SOUND)
+    		    .setSound(Uri.parse("file://" + 
+    	    		    Environment.DIRECTORY_DOWNLOADS + File.separator + "airporn.mp3"))
     		    .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
     		    .setContentText(name + " CPU Usage High!");
     	
@@ -96,13 +113,14 @@ public class AlertService extends Service{
     	        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     	// Builds the notification and issues it.
     	mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    	alert = true;
     }
     
 	private void scanServers(){
 		for (Server server : mUserServers) {
 			//ApiHelper.getCpuHistory(id)
 			//ApiHelper.getCpuHistory(server.getServerId().toString());
-			Log.d("CPU average", "" + averageCpu(server.getServerName(), ApiHelper.getCpuHistoryArray(server.getServerId().toString())));
+			Log.d("CPU average", "" + averageCpu(server.getServerName(), mHelper.getCpuHistoryArray(server.getServerId().toString())));
 			//Log.d("RAM average", "" + averageRam(ApiHelper.getRamHistory(server.getServerId().toString())));
 		}
 	}
@@ -113,7 +131,7 @@ public class AlertService extends Service{
     
 	@Override
 	public void onCreate(){
-		
+		mHelper = new ApiHelper();
 		mHandler = new Handler();
 		queueRunnable();
 	}

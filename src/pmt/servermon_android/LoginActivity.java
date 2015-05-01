@@ -22,7 +22,8 @@ public class LoginActivity extends Activity {
 		String password = ((EditText) findViewById(R.id.etPassword)).getEditableText().toString();
 		
 		try {
-			String token = ApiHelper.login(email, password);
+			ApiHelper helper = new ApiHelper();
+			String token = helper.login(email, password);
 			
 			SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);	
 			Editor editor = sharedpreferences.edit();

@@ -12,6 +12,7 @@ public class UpdateService extends Service {
 	private Handler mHandler;
     private boolean serviceStopped;
     private String mServerId;
+    private ApiHelper mHelper;
     
     private Runnable updateRunnable = new Runnable() {
         @Override
@@ -21,15 +22,15 @@ public class UpdateService extends Service {
                 Intent intent = new Intent("pmt.servermon_android.updateserver");
                 Log.d("ServerId", mServerId);
                 
-                Log.d("Ram", ApiHelper.getRam(mServerId).toString());
-                Log.d("Cpu", ApiHelper.getCpu(mServerId).toString());
-                Log.d("Disk", ApiHelper.getDisks(mServerId).toString());
-                Log.d("Network", ApiHelper.getNetwork(mServerId).toString());      
+                Log.d("Ram", mHelper.getRam(mServerId).toString());
+                Log.d("Cpu", mHelper.getCpu(mServerId).toString());
+                Log.d("Disk", mHelper.getDisks(mServerId).toString());
+                Log.d("Network", mHelper.getNetwork(mServerId).toString());      
                 
-                intent.putExtra("ram", ApiHelper.getRam(mServerId));
-                intent.putExtra("cpu", ApiHelper.getCpu(mServerId));
-                intent.putParcelableArrayListExtra("disk", ApiHelper.getDisks(mServerId));
-                intent.putExtra("network", ApiHelper.getNetwork(mServerId));
+                intent.putExtra("ram", mHelper.getRam(mServerId));
+                intent.putExtra("cpu", mHelper.getCpu(mServerId));
+                intent.putParcelableArrayListExtra("disk", mHelper.getDisks(mServerId));
+                intent.putExtra("network", mHelper.getNetwork(mServerId));
                 sendBroadcast(intent);
                 
             }
@@ -43,7 +44,7 @@ public class UpdateService extends Service {
     
 	@Override
 	public void onCreate(){
-		
+		mHelper = new ApiHelper();
 		mHandler = new Handler();
 		queueRunnable();
 	}

@@ -44,34 +44,34 @@ public class ServerViewActivity extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d("Received!", "The Broadcast!");
-			
+
 			updateView(intent.getParcelableExtra("ram").toString(), intent
 					.getParcelableExtra("cpu").toString(), intent
-					.getParcelableArrayListExtra("disk").get(0).toString(), intent
-					.getParcelableExtra("network").toString());
+					.getParcelableArrayListExtra("disk").get(0).toString(),
+					intent.getParcelableExtra("network").toString());
 		}
 
 	};
-	
-	public void launchCpuView(View v){
+
+	public void launchCpuView(View v) {
 		Intent intent = new Intent(this, CpuActivity.class);
-		//startActivity(intent);
+		// startActivity(intent);
 	}
-	
-	public void launchRamView(View v){
+
+	public void launchRamView(View v) {
 		Intent intent = new Intent(this, RamActivity.class);
 		intent.putExtra("server", mServer);
-		//startActivity(intent);
+		// startActivity(intent);
 	}
-	
-	public void launchDiskView(View v){
+
+	public void launchDiskView(View v) {
 		Intent intent = new Intent(this, DiskActivity.class);
-		//startActivity(intent);		
+		// startActivity(intent);
 	}
-	
-	public void launchNetworkView(View v){
+
+	public void launchNetworkView(View v) {
 		Intent intent = new Intent(this, NetworkActivity.class);
-		//startActivity(intent);	
+		// startActivity(intent);
 	}
 
 	public String getToken() {
@@ -108,7 +108,7 @@ public class ServerViewActivity extends Activity {
 		cpuTv.setText(mCpu.toString());
 		netTv.setText(mNet.toString());
 		diskTv.setText(mDisk.toString());
-		//updateDiskView();
+		// updateDiskView();
 	}
 
 	private void updateView(String ram, String cpu, String disks, String net) {
@@ -118,25 +118,11 @@ public class ServerViewActivity extends Activity {
 		diskTv.setText(disks);
 	}
 
-	private void updateStats() {
-		mRam = ApiHelper.getRam(mServer.getServerId());
-		mCpu = ApiHelper.getCpu(mServer.getServerId());
-		mCpus = ApiHelper.getCpus(mServer.getServerId());
-		mDisk = ApiHelper.getDisks(mServer.getServerId()).get(0);
-		//mDisks = ApiHelper.getDisks(mServer.getServerId()).get(0);
-		mNet = ApiHelper.getNetwork(mServer.getServerId());
-	}
-
 	private void initUpdateService() {
 		Intent i = new Intent(this, UpdateService.class);
 		i.putExtra("id", mServer.getServerId());
 
 		startService(i);
-	}
-
-	public void update() {
-		updateStats();
-		updateView();
 	}
 
 	@Override
@@ -155,12 +141,11 @@ public class ServerViewActivity extends Activity {
 
 		// Server s = ApiHelper.getServer(mToken, mServer.getServerId());
 
-		registerReceiver(receiver, new IntentFilter("pmt.servermon_android.updateserver"));
+		registerReceiver(receiver, new IntentFilter(
+				"pmt.servermon_android.updateserver"));
 
 		initUpdateService();
-		updateStats();
 		updateView();
-
 	}
 
 	@Override

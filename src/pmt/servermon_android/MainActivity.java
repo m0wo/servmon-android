@@ -51,13 +51,13 @@ public class MainActivity extends Activity {
 
 		return result;
 	}
-	
-	private void initAlertService(ArrayList<Server> servers){
+
+	private void initAlertService(ArrayList<Server> servers) {
 		Intent i = new Intent(this, AlertService.class);
 		i.putParcelableArrayListExtra("servers", servers);
-		
+
 		startService(i);
-		
+
 	}
 
 	private void openServerPage(Server s) {
@@ -94,12 +94,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		if (checkAuth()) {
-			ArrayList<Server> servers = ApiHelper.getUserServers(mToken);
-			
-			
+			ApiHelper helper = new ApiHelper();
+			ArrayList<Server> servers = helper.getUserServers(mToken);
+
 			initAlertService(servers);
-			
-			
+
 			lvServers = (ListView) findViewById(R.id.lvServers);
 
 			mAdapter = new ServerAdapter(this, servers);
@@ -114,22 +113,15 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
-		
-		
-		
+
 		return true;
 	}
-	
-	public void logOut(){
-		
-		
-		this.getSharedPreferences("prefs", 0).edit().clear().commit(); 
-		
-		//sharedpreferences.edit().remove("token");
+
+	public void logOut() {
+		this.getSharedPreferences("prefs", 0).edit().clear().commit();
 		checkAuth();
-		//Destroy key
-		//Redirect to login activity
+		// Destroy key
+		// Redirect to login activity
 	}
 
 	@Override
@@ -140,7 +132,7 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
-		}else if(id == R.id.action_logout){
+		} else if (id == R.id.action_logout) {
 			logOut();
 		}
 		return super.onOptionsItemSelected(item);

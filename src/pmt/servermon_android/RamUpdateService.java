@@ -11,6 +11,7 @@ public class RamUpdateService extends Service {
 	private Handler mHandler;
     private boolean serviceStopped;
     private String mServerId;
+    private ApiHelper mHelper;
     
     private Runnable updateRunnable = new Runnable() {
         @Override
@@ -18,7 +19,7 @@ public class RamUpdateService extends Service {
             if (serviceStopped == false)
             {
             	Intent intent = new Intent("pmt.servermon_android.ramUpdate");
-            	String result = ApiHelper.getRamHistory(mServerId).toString();
+            	String result = mHelper.getRamHistory(mServerId).toString();
             	Log.d("broadcunt",result);
                 intent.putExtra("ramHistory", result);
                 
@@ -35,7 +36,7 @@ public class RamUpdateService extends Service {
     
 	@Override
 	public void onCreate(){
-		
+		mHelper = new ApiHelper();
 		mHandler = new Handler();
 		queueRunnable();
 	}
