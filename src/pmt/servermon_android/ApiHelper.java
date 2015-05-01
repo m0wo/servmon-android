@@ -500,7 +500,11 @@ public class ApiHelper {
 
 		try {
 			JSONObject token = new JSONObject(responseBody);
-			tokenString = token.get("token").toString();
+			if(token.get("token") != null){
+				tokenString = token.get("token").toString();
+				return tokenString;
+			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

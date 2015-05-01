@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class LoginActivity extends Activity {
@@ -23,16 +24,26 @@ public class LoginActivity extends Activity {
 		
 		try {
 			ApiHelper helper = new ApiHelper();
+			
 			String token = helper.login(email, password);
-			
-			SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);	
-			Editor editor = sharedpreferences.edit();
-			editor.putString("token", token);
-			editor.commit();
-			
-			Log.d("key stored:", sharedpreferences.getString("token", null));
-			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+			if(token != null){
+				SharedPreferences sharedpreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);	
+				Editor editor = sharedpreferences.edit();
+				editor.putString("token", token);
+				editor.commit();
+				
+				Log.d("key stored:", sharedpreferences.getString("token", null));
+				Intent intent = new Intent(this, MainActivity.class);
+				startActivity(intent);				
+			}else{
+				Context context = getApplicationContext();
+				CharSequence text = "Invalid username or password!";
+				int duration = Toast.LENGTH_LONG;
+
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+			}
+
 			
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
